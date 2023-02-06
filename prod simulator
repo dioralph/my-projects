@@ -1,0 +1,135 @@
+import datetime
+from tkinter import *
+
+
+root = Tk()
+p1 = PhotoImage(file="images\c2.png")
+# Icon set for program window
+root.iconphoto(False, p1)
+root.title("C2 prod simulator")
+
+YYYY = Label(root, text="YYYY")
+YYYY.grid(row=0, column=0)
+fbo_yeare = Entry(root, width=4, borderwidth=1)
+fbo_yeare.grid(row=1, column=0)
+
+M = Label(root, text="M")
+M.grid(row=0, column=1)
+fbo_monthe = Entry(root, width=2, borderwidth=1)
+fbo_monthe.grid(row=1, column=1)
+
+DD = Label(root, text="DD")
+DD.grid(row=0, column=2)
+fbo_daye = Entry(root, width=2, borderwidth=1)
+fbo_daye .grid(row=1, column=2)
+
+HH = Label(root, text="HH")
+HH.grid(row=0, column=4)
+fbo_hourse = Entry(root, width=2, borderwidth=1)
+fbo_hourse.grid(row=1, column=4)
+
+nothin1 = Label(root, text=":")
+nothin1.grid(row=1, column=5)
+
+mm = Label(root, text="mm")
+mm.grid(row=0, column=6)
+fbo_mine = Entry(root, width=2, borderwidth=1)
+fbo_mine.grid(row=1, column=6)
+
+rh = Label(root, text="Hours run")
+rh.grid(row=2, column=3)
+run_hourse = Entry(root, width=2, borderwidth=1)
+run_hourse.grid(row=3, column=3)
+
+cy = Label(root, text="Cycles")
+cy.grid(row=2, column=0)
+cyclese = Entry(root, width=2, borderwidth=1)
+cyclese.grid(row=3, column=0)
+
+pm = Label(root, text="GAP")
+pm.grid(row=2, column=1)
+pmgap = Entry(root, width=2, borderwidth=1)
+pmgap.grid(row=3, column=1)
+
+nothin2 = Label(root, text="CIP default at 3-steps")
+nothin2.grid(row=4, column=0, columnspan=7)
+
+myLabel1 = Label(root, text="", font='Comic 12')
+myLabel1.grid(row=6, column=0, columnspan=4)
+myLabel2 = Label(root, text="", font='Comic 12')
+myLabel2.grid(row=7, column=0, columnspan=4)
+
+def simulate():
+    row = 6
+    rows = 7
+
+    try:
+        fbo_year = int(fbo_yeare.get())
+        fbo_month = int(fbo_monthe.get())
+        fbo_day = int(fbo_daye.get())
+        fbo_hours = int(fbo_hourse.get())
+        fbo_min = int(fbo_mine.get())
+        cycles = int(cyclese.get())
+        run_hours = int(run_hourse.get())
+        pmgap1 = int(pmgap.get())
+        FBOs = datetime.datetime(fbo_year, fbo_month, fbo_day, fbo_hours, fbo_min)
+
+
+
+
+        for run in range(0, cycles):
+            run = run + 1
+            FBO = FBOs
+            fbo1 = FBO.strftime("%a, %H:%M %b, %d, %Y")
+            fbo = "FBO", run, fbo1
+            hours_run = datetime.timedelta(hours=run_hours)
+            LBO = FBO + hours_run
+            lbo1 = LBO.strftime("%a, %H:%M %b, %d, %Y")
+            lbo = "LBO", run, lbo1
+            FBOs = LBO + datetime.timedelta(hours=4+pmgap1)
+
+            myLabel1 = Label(root, text=fbo, font='Comic 12')
+            myLabel1.grid(row=row, column=0, columnspan=4)
+            myLabel2 = Label(root, text=lbo, font='Comic 12')
+            myLabel2.grid(row=rows, column=0, columnspan=4)
+            row = row + 2
+            rows = rows + 2
+
+    except:
+        a = "Syntax error, please check input"
+        myLabel1 = Label(root, text=a)
+        myLabel1.grid(row=row, column=0, columnspan=4)
+
+def clear():
+    row = 6
+    rows = 7
+    try:
+        cycles = int(cyclese.get())
+        for run in range(0, cycles):
+            myLabel1 = Label(root, text="                                             ", font='Comic 12')
+            myLabel1.grid(row=row, column=0, columnspan=4)
+            myLabel2 = Label(root, text="                                             ", font='Comic 12')
+            myLabel2.grid(row=rows, column=0, columnspan=4)
+            row = row + 2
+            rows = rows + 2
+
+        fbo_yeare.delete(0, END)
+        fbo_monthe.delete(0, END)
+        fbo_daye.delete(0, END)
+        fbo_hourse.delete(0, END)
+        fbo_mine.delete(0, END)
+        cyclese.delete(0, END)
+        run_hourse.delete(0, END)
+        pmgap.delete(0, END)
+
+    except:
+        pass
+
+
+myButton1 = Button(root, text="Simulate",  padx=25, pady=20, command=lambda: simulate(), bg="light green")
+myButton1.grid(row=5, column=1, columnspan=5)
+
+clearbutton = Button(root, text="Clear", command=lambda: clear(), bg="pink")
+clearbutton .grid(row=5, column=6, columnspan=7)
+
+root.mainloop()
